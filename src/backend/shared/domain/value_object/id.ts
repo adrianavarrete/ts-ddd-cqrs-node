@@ -1,21 +1,15 @@
-const _ = require("lodash");
-const ValueObject = require("./value_object");
+const _ = require('lodash')
+const ValueObject = require('./value_object')
 
-function idError({
-  value,
-  message = "this is an error",
-}: {
-  value: string;
-  message?: string ;
-}) {
-  return new Error(`${message} --> value: ${value}`);
+function idError({ value, message = 'this is an error' }: { value: string; message?: string }) {
+	return new Error(`${message} --> value: ${value}`)
 }
 
 export class Id extends ValueObject<string> {
-  constructor(value: string) {
-    if (!_.isString(value)) {
-      throw idError({ value});
-    }
-    super(value);
-  }
+	constructor(value: string) {
+		if (!_.isString(value)) {
+			throw idError({ value })
+		}
+		super(value)
+	}
 }
