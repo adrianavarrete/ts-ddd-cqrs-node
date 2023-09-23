@@ -6,7 +6,7 @@ function idError({
   message = "this is an error",
 }: {
   value: string;
-  message: string | null;
+  message?: string ;
 }) {
   return new Error(`${message} --> value: ${value}`);
 }
@@ -14,7 +14,7 @@ function idError({
 export class Id extends ValueObject<string> {
   constructor(value: string) {
     if (!_.isString(value)) {
-      throw idError({ value, message: null });
+      throw idError({ value});
     }
     super(value);
   }
