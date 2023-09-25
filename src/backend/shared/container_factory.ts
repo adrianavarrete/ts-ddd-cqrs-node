@@ -39,7 +39,7 @@ type Container = {
 //import all BC modules with their commandHandlers and queryHandlers
 const modules: Module[] = []
 
-function createContainer() {
+async function createContainer() {
 	const container: Container = {
 		commandHandlers: {},
 		queryHandlers: {},
