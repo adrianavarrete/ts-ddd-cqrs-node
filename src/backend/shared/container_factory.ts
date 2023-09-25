@@ -5,41 +5,12 @@ import _ from 'lodash'
 
 import { SyncInMemoryHandlerBus } from './buses/buses'
 import { CommandQuery } from './buses/command_query'
-
-type Module = {
-	id: string
-	name: string
-	commandHandlers: Record<string, (command: CommandQuery) => Promise<void>>
-	queryHandlers: Record<string, (query: CommandQuery) => Promise<void>>
-}
-
-export type CommandHandlers = Record<
-	string,
-	{
-		moduleName: string
-		handlerName: string
-		handler: (command: CommandQuery) => Promise<void>
-	}
->
-
-export type QueryHandlers = Record<
-	string,
-	{
-		moduleName: string
-		handlerName: string
-		handler: (query: CommandQuery) => Promise<void>
-	}
->
-
-type Container = {
-	commandHandlers: CommandHandlers
-	queryHandlers: QueryHandlers
-}
+import { CommandHandlers, Container, Module, QueryHandlers } from './container_factory_types'
 
 //import all BC modules with their commandHandlers and queryHandlers
 const modules: Module[] = []
 
-async function createContainer() {
+function createContainer() {
 	const container: Container = {
 		commandHandlers: {},
 		queryHandlers: {},
@@ -110,4 +81,4 @@ function createCommandBus({
 	return commandBus
 }
 
-module.exports = { createQueryBus, createCommandBus, createContainer }
+export { createQueryBus, createCommandBus, createContainer }
