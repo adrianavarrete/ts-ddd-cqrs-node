@@ -1,4 +1,5 @@
-const uuid = require('uuid')
+// const uuid = require('uuid')
+import uuid from 'uuid'
 
 export class CommandQuery {
 	protected _type: string
