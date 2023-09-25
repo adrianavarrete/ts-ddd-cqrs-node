@@ -1,20 +1,21 @@
 // SyncInMemoryCommandBus, SyncInMemoryQueryBus
 
+import { CommandHandlers, QueryHandlers } from '../container_factory'
 import { CommandQuery } from './command_query'
 
 export class SyncInMemoryHandlerBus {
-	protected _handlers: Record<string, (commandOrQuery: CommandQuery) => void>
+	protected _handlers: QueryHandlers | CommandHandlers
 
 	constructor() {
 		this._handlers = {}
 	}
 
-	setHandlers(handlers: Record<string, (commandOrQuery: CommandQuery) => void>) {
+	setHandlers(handlers: QueryHandlers) {
 		this._handlers = handlers
 	}
 
 	async handle(commandOrQuery: CommandQuery) {
-		let handler = this._handlers[commandOrQuery.getType()]
+		const { handler } = this._handlers[commandOrQuery.getType()]
 
 		if (handler) {
 			return handler(commandOrQuery)
