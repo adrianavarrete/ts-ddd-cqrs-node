@@ -1,16 +1,18 @@
-import express, { Application, Request, Response } from 'express'
+import express, { type Application, type Request, type Response } from 'express'
 import { createContainer } from './backend/shared/container_factory'
-import { CommandQuery } from './backend/shared/buses/command_query'
+import { type CommandQuery } from './backend/shared/buses/command_query'
 
-declare module 'express-serve-static-core' {
-	interface Request {
-		commandBus?: any
-		queryBus?: any
+declare global {
+	namespace Express {
+		export interface Request {
+			commandBus?: any
+			queryBus?: any
+		}
 	}
 }
 
 const app: Application = express()
-const port: string | Number = process.env.PORT || 3001
+const port: string | number = process.env.PORT || 3001
 
 app.listen(port, () => {
 	console.log(`Server running at http://localhost:${port}`)

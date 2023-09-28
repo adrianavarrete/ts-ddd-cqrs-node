@@ -1,12 +1,12 @@
-// const uuid = require('uuid')
+//const uuid = require('uuid')
 import uuid from 'uuid'
 
 export class CommandQuery {
 	protected _type: string
 	protected _id: string
 	protected _occurredOn: string
-	protected _attributes: {}
-	protected _meta: {}
+	protected _attributes: object
+	protected _meta: object
 
 	constructor({
 		_type,
@@ -18,8 +18,8 @@ export class CommandQuery {
 		_type: string
 		_id?: string
 		_occurredOn?: string
-		_attributes?: {}
-		_meta?: {}
+		_attributes?: object
+		_meta?: object
 	}) {
 		this._type = _type
 		this._id = _id
