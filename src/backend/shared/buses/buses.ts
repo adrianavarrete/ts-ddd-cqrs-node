@@ -1,7 +1,7 @@
 // SyncInMemoryCommandBus, SyncInMemoryQueryBus
 
-import { CommandHandlers, QueryHandlers } from '../container_factory_types'
-import { CommandQuery } from './command_query'
+import { type CommandHandlers, type QueryHandlers } from '../container_factory_types'
+import { type CommandQuery } from './command_query'
 
 export class SyncInMemoryHandlerBus {
 	protected _handlers: QueryHandlers | CommandHandlers

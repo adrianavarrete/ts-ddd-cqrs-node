@@ -1,4 +1,3 @@
-//const uuid = require('uuid')
 import uuid from 'uuid'
 
 export class CommandQuery {

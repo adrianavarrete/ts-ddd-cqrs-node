@@ -1,4 +1,4 @@
-import { CommandQuery } from './buses/command_query'
+import { type CommandQuery } from './buses/command_query'
 
 export type Module = {
 	id: string

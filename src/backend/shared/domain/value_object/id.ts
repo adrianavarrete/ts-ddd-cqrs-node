@@ -1,5 +1,5 @@
-const _ = require('lodash')
-const ValueObject = require('./value_object')
+import _ from 'lodash'
+import { ValueObject } from './value_object'
 
 function idError({ value, message = 'this is an error' }: { value: string; message?: string }) {
 	return new Error(`${message} --> value: ${value}`)

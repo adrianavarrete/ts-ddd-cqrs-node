@@ -1,12 +1,13 @@
-import express, { type Application, type Request, type Response } from 'express'
+import express, { type Application, type Request, type Response, type NextFunction } from 'express'
 import { createContainer } from './backend/shared/container_factory'
 import { type CommandQuery } from './backend/shared/buses/command_query'
 
 declare global {
+	// eslint-disable-next-line @typescript-eslint/no-namespace
 	namespace Express {
 		export interface Request {
-			commandBus?: any
-			queryBus?: any
+			commandBus?: object
+			queryBus?: object
 		}
 	}
 }
@@ -22,7 +23,7 @@ app.use(express.json())
 
 const { queryBus, commandBus } = createContainer()
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
 	req.commandBus = {
 		handle: (command: CommandQuery) => commandBus.handle(command),
 	}

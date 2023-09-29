@@ -4,8 +4,13 @@ import _ from 'lodash'
 /* ====================================================== */
 
 import { SyncInMemoryHandlerBus } from './buses/buses'
-import { CommandQuery } from './buses/command_query'
-import { CommandHandlers, Container, Module, QueryHandlers } from './container_factory_types'
+import { type CommandQuery } from './buses/command_query'
+import {
+	type CommandHandlers,
+	type Container,
+	type Module,
+	type QueryHandlers,
+} from './container_factory_types'
 
 //import all BC modules with their commandHandlers and queryHandlers
 const modules: Module[] = []
