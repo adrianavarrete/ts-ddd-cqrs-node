@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import applyMiddleware from './buses/middlewares/apply_middleware'
 /* ====================================================== */
 /*                      Public API                        */
 /* ====================================================== */
@@ -6,11 +7,14 @@ import _ from 'lodash'
 import { SyncInMemoryHandlerBus } from './buses/buses'
 import { type CommandQuery } from './buses/command_query'
 import {
-	type CommandHandlers,
+	type Handler,
+	type ContainerCommandHandlers,
 	type Container,
 	type Module,
+	type ContainerQueryHandlers,
 	type QueryHandlers,
 } from './container_factory_types'
+import { type Middleware } from './buses/middlewares/middleware_types'
 
 //import all BC modules with their commandHandlers and queryHandlers
 const modules: Module[] = []
@@ -28,7 +32,7 @@ function createContainer() {
 			container.commandHandlers[commandType] = {
 				moduleName: module.name,
 				handlerName: commandHandler.name,
-				handler: async (command: CommandQuery) => {
+				handler: (command: CommandQuery) => {
 					return commandHandler(command)
 				},
 			}
@@ -58,12 +62,31 @@ function createContainer() {
 	}
 }
 
-function createQueryBus({ handlers }: { handlers: QueryHandlers }) {
+function createQueryBus({ handlers }: { handlers: ContainerQueryHandlers }) {
 	const queryBus = new SyncInMemoryHandlerBus()
 
-	const queryHandlers: QueryHandlers = handlers
+	const queryHandlers: QueryHandlers = {}
 
 	// TODO: Middlewares to all queryHandlers
+	_.forEach(handlers, (_handler, queryType) => {
+		const queryHandlerMiddlewares: Array<Middleware> = [
+			(next) => (query: CommandQuery) => {
+				return next(query, {
+					moduleName: _handler.moduleName,
+					handlerName: _handler.handlerName,
+					queryBus: {
+						handle(_query: CommandQuery) {
+							return queryBus.handle(_query)
+						},
+					},
+				})
+			},
+		]
+
+		const _queryHandler: Handler<CommandQuery> = applyMiddleware(_handler.handler, queryHandlerMiddlewares)
+
+		queryHandlers[queryType] = _queryHandler
+	})
 
 	queryBus.setHandlers(queryHandlers)
 	return queryBus
@@ -73,12 +96,12 @@ function createCommandBus({
 	handlers,
 	queryBus,
 }: {
-	handlers: CommandHandlers
+	handlers: ContainerCommandHandlers
 	queryBus: SyncInMemoryHandlerBus
 }) {
 	const commandBus = new SyncInMemoryHandlerBus()
 
-	const commandHandlers = handlers
+	const commandHandlers = {}
 
 	// TODO: Inject QueryBus and middlewares to all commandHandlers
 
