@@ -1,9 +1,5 @@
 import _ from 'lodash'
 import applyMiddleware from './buses/middlewares/apply_middleware'
-/* ====================================================== */
-/*                      Public API                        */
-/* ====================================================== */
-
 import { SyncInMemoryHandlerBus } from './buses/buses'
 import { type CommandQuery } from './buses/command_query'
 import {
@@ -13,11 +9,12 @@ import {
 	type Module,
 	type ContainerQueryHandlers,
 	type QueryHandlers,
+	type CommandHandlers,
 } from './container_factory_types'
 import { type Middleware } from './buses/middlewares/middleware_types'
 
 //import all BC modules with their commandHandlers and queryHandlers
-const modules: Module[] = []
+const modules: Array<Module> = []
 
 function createContainer() {
 	const container: Container = {
@@ -67,7 +64,6 @@ function createQueryBus({ handlers }: { handlers: ContainerQueryHandlers }) {
 
 	const queryHandlers: QueryHandlers = {}
 
-	// TODO: Middlewares to all queryHandlers
 	_.forEach(handlers, (_handler, queryType) => {
 		const queryHandlerMiddlewares: Array<Middleware> = [
 			(next) => (query: CommandQuery) => {
@@ -101,10 +97,30 @@ function createCommandBus({
 }) {
 	const commandBus = new SyncInMemoryHandlerBus()
 
-	const commandHandlers = {}
+	const commandHandlers: CommandHandlers = {}
 
-	// TODO: Inject QueryBus and middlewares to all commandHandlers
+	_.forEach(handlers, (_handler, commandType) => {
+		const commandHandlerMiddlewares: Array<Middleware> = [
+			(next) => (query: CommandQuery) => {
+				return next(query, {
+					moduleName: _handler.moduleName,
+					handlerName: _handler.handlerName,
+					queryBus: {
+						handle(_query: CommandQuery) {
+							return queryBus.handle(_query)
+						},
+					},
+				})
+			},
+		]
 
+		const _commandHandler: Handler<CommandQuery> = applyMiddleware(
+			_handler.handler,
+			commandHandlerMiddlewares,
+		)
+
+		commandHandlers[commandType] = _commandHandler
+	})
 	commandBus.setHandlers(commandHandlers)
 	return commandBus
 }
