@@ -15,7 +15,7 @@ export class SyncInMemoryHandlerBus {
 	}
 
 	async handle(commandOrQuery: CommandQuery) {
-		const { handler } = this._handlers[commandOrQuery.getType()]
+		const handler = this._handlers[commandOrQuery.getType()]
 
 		if (handler) {
 			return handler(commandOrQuery)
