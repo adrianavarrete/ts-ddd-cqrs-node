@@ -1,13 +1,14 @@
 import express, { type Application, type Request, type Response, type NextFunction } from 'express'
 import { createContainer } from './backend/shared/container_factory'
-import { type CommandQuery } from './backend/shared/buses/command_query'
+import { type Query, type Command } from './backend/shared/buses/command_query'
+import { CreateExcersiceCommand } from './backend/excercise/application/create_excercise/create_excersice_command'
 
 declare global {
 	// eslint-disable-next-line @typescript-eslint/no-namespace
 	namespace Express {
 		export interface Request {
-			commandBus?: object
-			queryBus?: object
+			commandBus: { handle: (command: Command) => Promise<void> }
+			queryBus: { handle: (query: Query) => Promise<void> }
 		}
 	}
 }
@@ -25,15 +26,16 @@ const { queryBus, commandBus } = createContainer()
 
 app.use((req: Request, res: Response, next: NextFunction) => {
 	req.commandBus = {
-		handle: (command: CommandQuery) => commandBus.handle(command),
+		handle: (command: Command) => commandBus.handle(command),
 	}
 	req.queryBus = {
-		handle: (query: CommandQuery) => queryBus.handle(query),
+		handle: (query: Query) => queryBus.handle(query),
 	}
 
 	return next()
 })
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/', async (req: Request, res: Response) => {
+	await req.commandBus.handle(CreateExcersiceCommand.create())
 	res.send('Hello! I am developed with TS')
 })

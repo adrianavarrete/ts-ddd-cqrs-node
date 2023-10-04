@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import applyMiddleware from './buses/middlewares/apply_middleware'
 import { SyncInMemoryHandlerBus } from './buses/buses'
-import { type CommandQuery } from './buses/command_query'
+import { type CommandQuery, type Command, type Query } from './buses/command_query'
 import {
 	type Handler,
 	type ContainerCommandHandlers,
@@ -13,8 +13,10 @@ import {
 } from './container_factory_types'
 import { type Middleware } from './buses/middlewares/middleware_types'
 
+import ExcerciseModule from '../excercise/module'
+
 //import all BC modules with their commandHandlers and queryHandlers
-const modules: Array<Module> = []
+const modules: Array<Module> = [ExcerciseModule]
 
 function createContainer() {
 	const container: Container = {
@@ -66,12 +68,12 @@ function createQueryBus({ handlers }: { handlers: ContainerQueryHandlers }) {
 
 	_.forEach(handlers, (_handler, queryType) => {
 		const queryHandlerMiddlewares: Array<Middleware> = [
-			(next) => (query: CommandQuery) => {
+			(next) => (query: Query) => {
 				return next(query, {
 					moduleName: _handler.moduleName,
 					handlerName: _handler.handlerName,
 					queryBus: {
-						handle(_query: CommandQuery) {
+						handle(_query: Query) {
 							return queryBus.handle(_query)
 						},
 					},
@@ -101,12 +103,12 @@ function createCommandBus({
 
 	_.forEach(handlers, (_handler, commandType) => {
 		const commandHandlerMiddlewares: Array<Middleware> = [
-			(next) => (query: CommandQuery) => {
-				return next(query, {
+			(next) => (command: Command) => {
+				return next(command, {
 					moduleName: _handler.moduleName,
 					handlerName: _handler.handlerName,
 					queryBus: {
-						handle(_query: CommandQuery) {
+						handle(_query: Query) {
 							return queryBus.handle(_query)
 						},
 					},
