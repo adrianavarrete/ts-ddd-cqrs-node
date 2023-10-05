@@ -1,7 +1,7 @@
 import express, { type Application, type Request, type Response, type NextFunction } from 'express'
 import { createContainer } from './backend/shared/container_factory'
 import { type Query, type Command } from './backend/shared/buses/command_query'
-import { CreateExcersiceCommand } from './backend/excercise/application/create_excercise/create_excersice_command'
+import { CreateExcersiceCommand } from './backend/excercise'
 
 declare global {
 	// eslint-disable-next-line @typescript-eslint/no-namespace
@@ -35,7 +35,15 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 	return next()
 })
 
-app.get('/', async (req: Request, res: Response) => {
-	await req.commandBus.handle(CreateExcersiceCommand.create())
-	res.send('Hello! I am developed with TS')
+const router = express.Router()
+
+router.get('/', (req: Request, res: Response, next: NextFunction) => {
+	req.commandBus
+		.handle(CreateExcersiceCommand.create())
+		.then(() => {
+			res.send('Hello! I am developed with TS')
+		})
+		.catch(next)
 })
+
+app.use('/api', router)
