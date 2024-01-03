@@ -16,7 +16,7 @@ import { type Middleware } from './buses/middlewares/middleware_types'
 import ExcerciseModule from '../excercise/module'
 
 //import all BC modules with their commandHandlers and queryHandlers
-const modules: Array<Module> = [ExcerciseModule]
+const modules = [ExcerciseModule]
 
 function createContainer() {
 	const container: Container = {

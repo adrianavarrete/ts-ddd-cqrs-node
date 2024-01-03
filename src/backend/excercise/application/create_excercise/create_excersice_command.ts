@@ -1,6 +1,6 @@
 import { Command } from '../../../shared/buses/command_query'
 
-export class CreateExcersiceCommand extends Command {
+export class CreateExcerciseCommand extends Command {
 	static get type() {
 		return 'excercise.1.command.create_exercise'
 	}

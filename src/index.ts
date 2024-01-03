@@ -1,7 +1,7 @@
-import express, { type Application, type Request, type Response, type NextFunction } from 'express'
+import express, { type Request, type Response, type NextFunction } from 'express'
 import { createContainer } from './backend/shared/container_factory'
 import { type Query, type Command } from './backend/shared/buses/command_query'
-import { CreateExcersiceCommand } from './backend/excercise'
+import { CreateExcerciseCommand } from './backend/excercise'
 
 declare global {
 	// eslint-disable-next-line @typescript-eslint/no-namespace
@@ -13,8 +13,8 @@ declare global {
 	}
 }
 
-const app: Application = express()
-const port: string | number = process.env.PORT || 3001
+const app = express()
+const port = process.env.PORT || 3001
 
 app.listen(port, () => {
 	console.log(`Server running at http://localhost:${port}`)
@@ -39,7 +39,7 @@ const router = express.Router()
 
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
 	req.commandBus
-		.handle(CreateExcersiceCommand.create())
+		.handle(CreateExcerciseCommand.create())
 		.then(() => {
 			res.send('Hello! I am developed with TS')
 		})
