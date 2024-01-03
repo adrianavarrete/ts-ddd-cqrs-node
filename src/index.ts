@@ -12,7 +12,7 @@ declare global {
 		}
 	}
 }
-// Add comment
+
 const app: Application = express()
 const port: string | number = process.env.PORT || 3001
 
