@@ -69,6 +69,9 @@ function createQueryBus({ handlers }: { handlers: ContainerQueryHandlers }) {
 	_.forEach(handlers, (_handler, queryType) => {
 		const queryHandlerMiddlewares: Array<Middleware> = [
 			(next) => (query: Query) => {
+				// Before execute the handler we add the dependencies object of the command
+				// where we can find the queryBus to use it inside the queryHandler
+
 				return next(query, {
 					moduleName: _handler.moduleName,
 					handlerName: _handler.handlerName,
@@ -104,6 +107,8 @@ function createCommandBus({
 	_.forEach(handlers, (_handler, commandType) => {
 		const commandHandlerMiddlewares: Array<Middleware> = [
 			(next) => (command: Command) => {
+				// Before execute the handler we add the dependencies object of the command
+				// where we can find the queryBus to use it inside the commandHandler
 				return next(command, {
 					moduleName: _handler.moduleName,
 					handlerName: _handler.handlerName,
