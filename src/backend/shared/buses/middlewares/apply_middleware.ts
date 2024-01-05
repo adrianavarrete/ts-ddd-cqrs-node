@@ -3,10 +3,10 @@
 /* ====================================================== */
 
 import { type Handler } from '../../container_factory_types'
-import { type CommandQuery } from '../command_query'
+import { type Query, type Command } from '../command_query'
 import { type Middleware } from './middleware_types'
 
-function applyMiddleware(fn: Handler<CommandQuery>, middlewares: Array<Middleware>) {
+function applyMiddleware(fn: Handler<Command | Query>, middlewares: Array<Middleware>) {
 	let fnWithMiddleware = fn
 	middlewares
 		.slice()

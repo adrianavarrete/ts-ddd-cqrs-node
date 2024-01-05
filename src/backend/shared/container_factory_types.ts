@@ -1,12 +1,12 @@
-import { type CommandQuery } from './buses/command_query'
+import { type Query, type Command } from './buses/command_query'
 
 export type Handler<T> = (commandOrQuery: T, dependencies?: object) => Promise<void>
 
 export type Module = {
 	id: string
 	name: string
-	commandHandlers: Record<string, Handler<CommandQuery>>
-	queryHandlers: Record<string, Handler<CommandQuery>>
+	commandHandlers: Record<string, Handler<Command>>
+	queryHandlers: Record<string, Handler<Query>>
 }
 
 export type ContainerCommandHandlers = Record<
@@ -14,7 +14,7 @@ export type ContainerCommandHandlers = Record<
 	{
 		moduleName: string
 		handlerName: string
-		handler: Handler<CommandQuery>
+		handler: Handler<Command>
 	}
 >
 
@@ -23,7 +23,7 @@ export type ContainerQueryHandlers = Record<
 	{
 		moduleName: string
 		handlerName: string
-		handler: Handler<CommandQuery>
+		handler: Handler<Query>
 	}
 >
 
@@ -31,6 +31,3 @@ export type Container = {
 	commandHandlers: ContainerCommandHandlers
 	queryHandlers: ContainerQueryHandlers
 }
-
-export type QueryHandlers = Record<string, Handler<CommandQuery>>
-export type CommandHandlers = Record<string, Handler<CommandQuery>>

@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import applyMiddleware from './buses/middlewares/apply_middleware'
-import { SyncInMemoryHandlerBus } from './buses/buses'
+import { type CommandHandlers, type QueryHandlers, SyncInMemoryHandlerBus } from './buses/buses'
 import { type CommandQuery, type Command, type Query } from './buses/command_query'
 import {
 	type Handler,
@@ -8,8 +8,6 @@ import {
 	type Container,
 	type Module,
 	type ContainerQueryHandlers,
-	type QueryHandlers,
-	type CommandHandlers,
 } from './container_factory_types'
 import { type Middleware } from './buses/middlewares/middleware_types'
 
@@ -71,7 +69,6 @@ function createQueryBus({ handlers }: { handlers: ContainerQueryHandlers }) {
 			(next) => (query: Query) => {
 				// Before execute the handler we add the dependencies object of the command
 				// where we can find the queryBus to use it inside the queryHandler
-
 				return next(query, {
 					moduleName: _handler.moduleName,
 					handlerName: _handler.handlerName,
@@ -84,7 +81,7 @@ function createQueryBus({ handlers }: { handlers: ContainerQueryHandlers }) {
 			},
 		]
 
-		const _queryHandler: Handler<CommandQuery> = applyMiddleware(_handler.handler, queryHandlerMiddlewares)
+		const _queryHandler: Handler<Query> = applyMiddleware(_handler.handler, queryHandlerMiddlewares)
 
 		queryHandlers[queryType] = _queryHandler
 	})
@@ -121,10 +118,7 @@ function createCommandBus({
 			},
 		]
 
-		const _commandHandler: Handler<CommandQuery> = applyMiddleware(
-			_handler.handler,
-			commandHandlerMiddlewares,
-		)
+		const _commandHandler = applyMiddleware(_handler.handler, commandHandlerMiddlewares)
 
 		commandHandlers[commandType] = _commandHandler
 	})

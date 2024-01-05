@@ -1,7 +1,7 @@
+import { type Command } from '../../../shared/buses/command_query'
 import { createExcerciseUseCase } from './create_excercise_use_case'
-import { type CreateExcerciseCommand } from './create_excersice_command'
 
-async function handlerCreateExcerciseCommand(command: CreateExcerciseCommand) {
+async function handlerCreateExcerciseCommand(command: Command) {
 	console.log(`@@@@@ command`, command)
 	await createExcerciseUseCase()
 }

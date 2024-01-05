@@ -1,4 +1,4 @@
 import { type Handler } from '../../container_factory_types'
-import { type CommandQuery } from '../command_query'
+import { type Query, type Command } from '../command_query'
 
-export type Middleware = (fn: Handler<CommandQuery>) => Handler<CommandQuery>
+export type Middleware = (fn: Handler<Command | Query>) => Handler<Command | Query>
