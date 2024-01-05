@@ -1,4 +1,4 @@
-import { type Command } from '../../../shared/buses/command_query'
+import { type Command } from '../../../shared/buses/action'
 import { createExcerciseUseCase } from './create_excercise_use_case'
 
 async function handlerCreateExcerciseCommand(command: Command) {

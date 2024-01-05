@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import applyMiddleware from './buses/middlewares/apply_middleware'
 import { type CommandHandlers, type QueryHandlers, SyncInMemoryHandlerBus } from './buses/buses'
-import { type CommandQuery, type Command, type Query } from './buses/command_query'
+import { type Command, type Query } from './buses/action'
 import {
 	type Handler,
 	type ContainerCommandHandlers,
@@ -29,7 +29,7 @@ function createContainer() {
 			container.commandHandlers[commandType] = {
 				moduleName: module.name,
 				handlerName: commandHandler.name,
-				handler: (command: CommandQuery) => {
+				handler: (command: Command) => {
 					return commandHandler(command)
 				},
 			}
@@ -39,7 +39,7 @@ function createContainer() {
 			container.queryHandlers[queryType] = {
 				moduleName: module.name,
 				handlerName: queryHandler.name,
-				handler: async (query: CommandQuery) => {
+				handler: async (query: Query) => {
 					return queryHandler(query)
 				},
 			}

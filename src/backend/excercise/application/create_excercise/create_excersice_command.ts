@@ -1,4 +1,4 @@
-import { Command } from '../../../shared/buses/command_query'
+import { Command } from '../../../shared/buses/action'
 
 export class CreateExcerciseCommand extends Command {
 	static get type() {

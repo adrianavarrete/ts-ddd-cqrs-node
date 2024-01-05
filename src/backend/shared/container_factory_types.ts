@@ -1,4 +1,4 @@
-import { type Query, type Command } from './buses/command_query'
+import { type Query, type Command } from './buses/action'
 
 export type Handler<T> = (commandOrQuery: T, dependencies?: object) => Promise<void>
 

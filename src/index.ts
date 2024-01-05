@@ -1,6 +1,6 @@
 import express, { type Request, type Response, type NextFunction } from 'express'
 import { createContainer } from './backend/shared/container_factory'
-import { type Query, type Command } from './backend/shared/buses/command_query'
+import { type Query, type Command } from './backend/shared/buses/action'
 import { CreateExcerciseCommand } from './backend/excercise'
 
 declare global {

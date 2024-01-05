@@ -1,7 +1,7 @@
 // SyncInMemoryCommandBus, SyncInMemoryQueryBus
 
 import { type Handler } from '../container_factory_types'
-import { Command, Query } from './command_query'
+import { Command, Query } from './action'
 
 export type QueryHandlers = Record<string, Handler<Query>>
 export type CommandHandlers = Record<string, Handler<Command>>
